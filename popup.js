@@ -5,7 +5,6 @@ let isSetup = true;
 $(document).ready(function() {
 
     const setup = () => {
-      // $("#on-off-switch").bootstrapToggle()
       const isOn = Utils.getIsOn();
       isSetup = true;
       if (isOn) {
