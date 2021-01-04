@@ -3,8 +3,8 @@ html,
         font-family: "Open Sans", sans-serif;
         font-size: 14px;
         margin: 0;
-        min-height: 180px;
-        padding: 0px 0px 10px 0px;
+        min-height: 100px;
+        padding: 0px 0px 0px 0px;
         width: 380px;
       }
 
@@ -30,6 +30,14 @@ html,
       .modal-header {
         align-items: center;
         border-bottom: 0.5px solid #dadada;
+      }
+
+      .switch-group {
+        margin-left: auto;
+      }
+
+      #on-off-label {
+        margin-top: 3px
       }
 
       .main-content {
@@ -61,7 +69,12 @@ html,
 
       .sites-list {
         margin-top: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
+      }
+
+      .list-group {
+        margin-top: 5px;
+        margin-bottom: 5px;
       }
 
       .logo {
@@ -71,6 +84,11 @@ html,
       .logo-icon {
         vertical-align: text-bottom;
         margin-right: 12px;
+      }
+
+      .toggle-switch {
+        max-width: 10px;
+        margin: 0px;
       }
 
       .version {

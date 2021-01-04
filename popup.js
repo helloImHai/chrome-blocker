@@ -1,31 +1,27 @@
-const KEY = "cblock-blacklisted"
+$(function(){ $('#on-off-switch').bootstrapToggle() });
 
-function getBlacklist() {
-  let blackList = localStorage.getItem(KEY);
-
-  if (!blackList) {
-      return []
-  }
-
-  if (!Array.isArray(JSON.parse(blackList))) {
-    setBlackList([])
-    return []
-  }
-
-  return JSON.parse(blackList);
-}
-
-function setBlackList(blackList) {
-  localStorage.setItem(KEY, JSON.stringify(blackList))
-}
+let isSetup = true;
 
 $(document).ready(function() {
+
+    const setup = () => {
+      // $("#on-off-switch").bootstrapToggle()
+      const isOn = Utils.getIsOn();
+      isSetup = true;
+      if (isOn) {
+        $('#on-off-switch').bootstrapToggle('on')
+      } else {
+        $('#on-off-switch').bootstrapToggle('off')
+      }
+      reloadPopup()
+    }
     /**
      * Generates the list
      */
-    const refreshListItems = () => {
-      const blackList = getBlacklist().reverse()
-
+    const reloadPopup = () => {
+      showContents(Utils.getIsOn())
+      const blackList = Utils.getBlacklist().reverse()
+      
       let lstStr = ""
       for (let i = 0; i < blackList.length; i++) {
         lstStr +=`<div class="list-group-item">${blackList[i]}</div>`;
@@ -34,21 +30,19 @@ $(document).ready(function() {
       $('#blocked-sites-list').html(lstStr);
       setShowClearButton(blackList.length != 0)
     }
-    refreshListItems()
 
     /**
      * Functionality of buttons
      */
-
     function handleAddSite() {
       const site = $('#site-input').val().trim()
       $("#site-input").val("")
       if (site == "") return
 
-      const blackList = getBlacklist()
+      const blackList = Utils.getBlacklist()
       blackList.push(site)
-      setBlackList(blackList)
-      refreshListItems()
+      Utils.setBlackList(blackList)
+      reloadPopup()
     }
 
     function setShowClearButton(isShowing) {
@@ -56,9 +50,25 @@ $(document).ready(function() {
         $("#site-clear-btn").show()
       } else {
         $("#site-clear-btn").hide()
-      }
-      
+      } 
     }
+
+    function showContents(isShowing) {
+      if (isShowing) {
+        $("#main-content-block").show();
+      } else {
+        $("#main-content-block").hide();
+      }
+    }
+
+    $("#on-off-switch").change(() => {
+      if (isSetup) {
+        isSetup = false;
+        return;
+      }
+      Utils.setIsOn(!Utils.getIsOn());
+      reloadPopup()
+    })
 
     $("#site-input").on('keyup', (e) => {
       if (e.key === 'Enter' || e.keyCode === 13) {
@@ -71,8 +81,9 @@ $(document).ready(function() {
     })
 
     $('#site-clear-btn').click(() => {
-      setBlackList([])
-      refreshListItems()
+      Utils.setBlackList([]);
+      reloadPopup();
     })
 
+    setup();
 });
