@@ -6,11 +6,18 @@
     "background": {
         "scripts": ["./components/background.js"]
     },
-    "icons": {"128": "icon128.png"},
+    "icons": { "128": "icon128.png" },
     "browser_action": {
         "default_icon": "icon19.png",
         "default_popup": "popup.html"
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js; object-src 'self'",
-    "permissions": ["activeTab", "storage", "webRequest", "webRequestBlocking", "tabs", "<all_urls>"]
+    "permissions": [
+        "activeTab",
+        "storage",
+        "webRequest",
+        "webRequestBlocking",
+        "tabs",
+        "<all_urls>"
+    ]
 }

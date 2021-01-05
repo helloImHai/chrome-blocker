@@ -1,128 +1,132 @@
 html,
-      body {
-        font-family: "Open Sans", sans-serif;
-        font-size: 14px;
-        margin: 0;
-        min-height: 100px;
-        padding: 0px 0px 0px 0px;
-        width: 380px;
-      }
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    margin: 0;
+    min-height: 100px;
+    padding: 0px 0px 0px 0px;
+    width: 380px;
+    /* background-color: #efefef; */
+}
 
-      h1 {
-        font-family: "Menlo", monospace;
-        font-size: 22px;
-        font-weight: 400;
-        margin: 0;
-        color: #2f5876;
-      }
+h1 {
+    font-family: "Menlo", monospace;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0;
+    color: #2f5876;
+}
 
-      a:link,
-      a:visited {
-        color: #000000;
-        outline: 0;
-        text-decoration: none;
-      }
+a:link,
+a:visited {
+    color: #000000;
+    outline: 0;
+    text-decoration: none;
+}
 
-      img {
-        width: 30px;
-      }
+img {
+    width: 30px;
+}
 
-      .modal-header {
-        align-items: center;
-        border-bottom: 0.5px solid #dadada;
-      }
+.modal-header {
+    align-items: center;
+    border-bottom: 0.5px solid #dadada;
+    padding: 5px 22px;
+}
 
-      .switch-group {
-        margin-left: auto;
-      }
+.toggle-group {
+    padding-right: 7px;
+}
 
-      #on-off-label {
-        margin-top: 3px
-      }
+.main-content {
+    margin: 10px 22px 10px 22px;
+}
 
-      .main-content {
-        padding: 10px 22px 0px 22px;
-      }
+.modal-icons {
+    border-top: 0.5px solid #dadada;
+    height: 50px;
+    width: 100%;
+}
+.site-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
 
-      .modal-icons {
-        border-top: 0.5px solid #dadada;
-        height: 50px;
-        width: 100%;
-      }
-      .site-form {
-        width: 100%;
-        display: flex;
-        align-items: center;
-      }
+#site-input {
+    width: 75%;
+}
 
-      #site-input {
-        width: 75%;
-      }
+#site-space {
+    width: 3%;
+}
 
-      #site-space {
-        width: 3%;
-      }
+#site-add-btn {
+    width: 22%;
+    background-color: #b1304b;
+    border-color: #b1304b;
+}
 
-      #site-add-btn {
-        width: 22%;
-      }
+#site-clear-btn {
+    background-color: #b1304b;
+    border-color: #b1304b;
+}
 
-      .sites-list {
-        margin-top: 5px;
-        margin-bottom: 5px;
-      }
+.sites-list {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
-      .list-group {
-        margin-top: 5px;
-        margin-bottom: 5px;
-      }
+.list-group {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
-      .list-group-item {
-        display: flex;
-        justify-content: space-between;
-      }
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+}
 
-      .logo {
-        padding: 16px;
-      }
+.logo {
+    padding: 16px;
+}
 
-      .logo-icon {
-        vertical-align: text-bottom;
-        margin-right: 12px;
-      }
+.logo-icon {
+    vertical-align: text-bottom;
+    margin-right: 12px;
+}
 
-      .toggle-switch {
-        max-width: 10px;
-        margin: 0px;
-      }
+.toggle-switch {
+    max-width: 10px;
+    margin: 0px;
+}
 
-      .version {
-        color: #444;
-        font-size: 11px;
-      }
+.version {
+    color: #444;
+    font-size: 11px;
+}
 
-      .flex-container {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 22px;
-      }
+.flex-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
 
-      .flex {
-        opacity: 1;
-        transition: opacity 0.2s ease-in-out;
-        width: 120px;
-      }
+.flex {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+    margin: 0px 5px;
+}
 
-      .flex:hover {
-        opacity: 0.4;
-      }
+.flex:hover {
+    opacity: 0.4;
+}
 
-      .flex .fa {
-        font-size: 40px;
-        color: #2f5876;
-      }
+.flex .fa {
+    font-size: 30px;
+}
 
-      /* Form */
-      #site-input {
-        margin-bottom: 3px;
-      }
+/* Form */
+#site-input {
+    margin-bottom: 3px;
+}

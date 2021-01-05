@@ -1,6 +1,11 @@
-const BLACKLIST_KEY = "cblock-blacklisted-asdf"
-const IS_ON_KEY = "cblock-iso-asdf"
-const WHITELIST = ["google", "maxcdn.bootstrapcdn", "cdn.jsdelivr.net", "fonts.gstatic"]
+const BLACKLIST_KEY = "cblock-blacklisted-zxcv";
+const IS_ON_KEY = "cblock-iso-zxcv";
+const WHITELIST = [
+    "google",
+    "maxcdn.bootstrapcdn",
+    "cdn.jsdelivr.net",
+    "fonts.gstatic",
+];
 
 function getBlacklist() {
     let blackList = localStorage.getItem(BLACKLIST_KEY);
@@ -13,7 +18,7 @@ function getBlacklist() {
 
 function getIsOn() {
     let isOn = localStorage.getItem(IS_ON_KEY);
-    return isOn == "true"
+    return isOn == "true";
 }
 
 function extractHostname(url) {
@@ -21,16 +26,15 @@ function extractHostname(url) {
     //find & remove protocol (http, ftp, etc.) and get hostname
 
     if (url.indexOf("//") > -1) {
-        hostname = url.split('/')[2];
-    }
-    else {
-        hostname = url.split('/')[0];
+        hostname = url.split("/")[2];
+    } else {
+        hostname = url.split("/")[0];
     }
 
     //find & remove port number
-    hostname = hostname.split(':')[0];
+    hostname = hostname.split(":")[0];
     //find & remove "?"
-    hostname = hostname.split('?')[0];
+    hostname = hostname.split("?")[0];
 
     return hostname;
 }
@@ -41,33 +45,35 @@ function whitelisted(hostname) {
             return true;
         }
     }
-    return false
+    return false;
 }
-  
-chrome.webRequest.onBeforeSendHeaders.addListener(msg => {
-    // Guard clause if turned off
-    if (!getIsOn() || !getBlacklist()) return;
 
-    const blackList = getBlacklist()
+chrome.webRequest.onBeforeSendHeaders.addListener(
+    (msg) => {
+        // Guard clause if turned off
+        if (!getIsOn() || !getBlacklist()) return;
 
-    const {url} = msg
-    const hostname = extractHostname(url)
+        const blackList = getBlacklist();
 
-    // Check if hostname is whitelisted
-    if (whitelisted(hostname)) {
-        return;
-    }
+        const { url } = msg;
+        const hostname = extractHostname(url);
 
-    console.log(`Blocked request to ${hostname}`);
-
-    for (let i = 0; i < blackList.length; i++) {
-        const blockedSite = blackList[i]
-        if (hostname.includes(blockedSite)) {
-            return {cancel: true}
+        // Check if hostname is whitelisted
+        if (whitelisted(hostname)) {
+            return;
         }
-    }
-}, 
-{
-    urls: ["<all_urls>"]
-},
-["blocking"])
+
+        // console.log(`Blocked request to ${hostname}`);
+
+        for (let i = 0; i < blackList.length; i++) {
+            const blockedSite = blackList[i];
+            if (hostname.includes(blockedSite)) {
+                return { cancel: true };
+            }
+        }
+    },
+    {
+        urls: ["<all_urls>"],
+    },
+    ["blocking"]
+);
