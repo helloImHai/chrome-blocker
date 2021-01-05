@@ -1,5 +1,5 @@
-const BLACKLIST_KEY = "cblock-blacklisted"
-const IS_ON_KEY = "cblock-ison"
+const BLACKLIST_KEY = "cblock-blacklisted-asdf"
+const IS_ON_KEY = "cblock-iso-asdf"
 
 const Utils = (function() {
     function getBlacklist() {

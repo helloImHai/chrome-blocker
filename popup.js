@@ -3,7 +3,6 @@ $(function(){ $('#on-off-switch').bootstrapToggle() });
 let isSetup = true;
 
 $(document).ready(function() {
-
     const setup = () => {
       const isOn = Utils.getIsOn();
       isSetup = true;
@@ -23,11 +22,33 @@ $(document).ready(function() {
       
       let lstStr = ""
       for (let i = 0; i < blackList.length; i++) {
-        lstStr +=`<div class="list-group-item">${blackList[i]}</div>`;
+        lstStr +=`<div class="list-group-item"><div>${blackList[i]}</div>
+            <button id="icon-remove-${i}"class="btn btn-sm"><i class="fa fa-close"></i></button>
+          </div>`;
       }
   
       $('#blocked-sites-list').html(lstStr);
+      setupIconRemoveButtons(blackList)
       setShowClearButton(blackList.length != 0)
+    }
+
+    function setupIconRemoveButtons(blackList) {
+      for (let i = 0; i < blackList.length; i++) {
+        $(`#icon-remove-${i}`).unbind()
+        $(`#icon-remove-${i}`).click(() => {
+          removeFromBlackList(blackList.length - i - 1)
+        })
+      }
+    }
+
+    function removeFromBlackList(index) {
+      let blackList = Utils.getBlacklist();
+      if (index < 0 || index >= blackList.length) {
+        return;
+      }
+      blackList.splice(index, 1);
+      Utils.setBlackList(blackList);
+      reloadPopup();
     }
 
     /**

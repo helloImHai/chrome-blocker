@@ -77,6 +77,11 @@ html,
         margin-bottom: 5px;
       }
 
+      .list-group-item {
+        display: flex;
+        justify-content: space-between;
+      }
+
       .logo {
         padding: 16px;
       }
