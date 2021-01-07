@@ -1,5 +1,5 @@
-const BLACKLIST_KEY = "cblock-blacklisted-zxcv";
-const IS_ON_KEY = "cblock-iso-zxcv";
+const BLACKLIST_KEY = "cblock-blacklisted-rewq";
+const IS_ON_KEY = "cblock-iso-rewq";
 const WHITELIST = [
     "google",
     "maxcdn.bootstrapcdn",
@@ -50,11 +50,10 @@ function whitelisted(hostname) {
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
     (msg) => {
-        // Guard clause if turned off
+        // Guard clause if turned off or no blacklist
         if (!getIsOn() || !getBlacklist()) return;
 
         const blackList = getBlacklist();
-
         const { url } = msg;
         const hostname = extractHostname(url);
 
@@ -74,6 +73,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     },
     {
         urls: ["https://*/*"],
+        types: ["main_frame"],
     },
     ["blocking"]
 );

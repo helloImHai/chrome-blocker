@@ -1,5 +1,5 @@
-const BLACKLIST_KEY = "cblock-blacklisted-zxcv";
-const IS_ON_KEY = "cblock-iso-zxcv";
+const BLACKLIST_KEY = "cblock-blacklisted-rewq";
+const IS_ON_KEY = "cblock-iso-rewq";
 
 const Utils = (function () {
     function getBlacklist() {
