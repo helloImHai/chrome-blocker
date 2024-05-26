@@ -5,29 +5,36 @@ $(function () {
 let isSetup = true;
 
 $(document).ready(function () {
-    const setup = () => {
-        const isOn = Utils.getIsOn();
-        isSetup = true;
-        if (isOn) {
+    async function setup_data() {
+        if (await Utils.get_is_on() == null) {
+            await Utils.set_is_on(false);
+        }
+        if (await Utils.get_blacklist() == null) {
+            await Utils.set_blacklist([]);
+        }
+    }
+
+    const setup = async () => {
+        await setup_data();
+        if (await Utils.get_is_on()) {
             $("#on-off-switch").bootstrapToggle("on");
         } else {
             $("#on-off-switch").bootstrapToggle("off");
         }
-        reloadPopup();
+        await reloadPopup();
     };
     /**
      * Generates the list
      */
-    const reloadPopup = () => {
-        console.log("[chrome-blocker] reloading popup")
-        showContents(Utils.getIsOn());
-        const blackList = Utils.getBlacklist().reverse();
+    const reloadPopup = async () => {
+        showContents(await Utils.get_is_on());
+        let blackList = (await Utils.get_blacklist()).reverse();
 
         let lstStr = "";
         for (let i = 0; i < blackList.length; i++) {
             lstStr += `<div class="list-group-item"><div>${blackList[i]}</div>
             <button id="icon-remove-${i}"class="btn btn-sm"><i class="fa fa-close"></i></button>
-          </div>`;
+            </div>`;
         }
 
         $("#blocked-sites-list").html(lstStr);
@@ -44,28 +51,29 @@ $(document).ready(function () {
         }
     }
 
-    function removeFromBlackList(index) {
-        let blackList = Utils.getBlacklist();
+    async function removeFromBlackList(index) {
+        let blackList = await Utils.get_blacklist();
         if (index < 0 || index >= blackList.length) {
             return;
         }
         blackList.splice(index, 1);
-        Utils.setBlackList(blackList);
-        reloadPopup();
+        await Utils.set_blacklist(blackList);
+        await reloadPopup();
     }
 
     /**
      * Functionality of buttons
      */
-    function handleAddSite() {
+    async function handleAddSite() {
         const site = $("#site-input").val().trim();
         $("#site-input").val("");
         if (site == "") return;
 
-        const blackList = Utils.getBlacklist();
+        const blackList = await Utils.get_blacklist();
+        console.log(`blacklist=${blackList}`)
         blackList.push(site);
-        Utils.setBlackList(blackList);
-        reloadPopup();
+        await Utils.set_blacklist(blackList);
+        await reloadPopup();
     }
 
     function setShowClearButton(isShowing) {
@@ -84,13 +92,13 @@ $(document).ready(function () {
         }
     }
 
-    $("#on-off-switch").change(() => {
+    $("#on-off-switch").change(async () => {
         if (isSetup) {
             isSetup = false;
             return;
         }
-        Utils.setIsOn(!Utils.getIsOn());
-        reloadPopup();
+        await Utils.set_is_on(!await Utils.get_is_on());
+        await reloadPopup();
     });
 
     $("#site-input").on("keyup", (e) => {
@@ -103,9 +111,9 @@ $(document).ready(function () {
         handleAddSite();
     });
 
-    $("#site-clear-btn").click(() => {
-        Utils.setBlackList([]);
-        reloadPopup();
+    $("#site-clear-btn").click(async () => {
+        await Utils.set_blacklist([]);
+        await reloadPopup();
     });
 
     setup();

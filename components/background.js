@@ -1,20 +1,17 @@
-// const BLACKLIST_KEY = "cblock-blacklisted-rewq";
-// const IS_ON_KEY = "cblock-iso-rewq";
+async function get_is_on() {
+    return (await chrome.storage.sync.get("cb_is_on")).cb_is_on;
+}
+
+async function get_blacklist() {
+    return (await chrome.storage.sync.get('cb_blacklist')).cb_blacklist;
+}
+
 const WHITELIST = [
     "google",
     "maxcdn.bootstrapcdn",
     "cdn.jsdelivr.net",
     "fonts.gstatic",
 ];
-
-function getBlacklist() {
-    let blackList = localStorage.getItem(BLACKLIST_KEY);
-    try {
-        return JSON.parse(blackList);
-    } catch (error) {
-        return [];
-    }
-}
 
 function extractHostname(url) {
     var hostname;
@@ -41,58 +38,34 @@ function whitelisted(hostname) {
     return false;
 }
 
-console.log("background code running..");
-
-function injectScript(tabId) {
+function block(tabId, rule) {
     chrome.scripting.executeScript({
       target: { tabId: tabId },
       files: ['components/block.js']
+    }, function () {
+        chrome.tabs.sendMessage(tabId, rule);
     });
 }
 
-function checkUrl(url) {
-    console.log(`[chrome-blocker] url: ${url}`)
-    if (!Utils.getIsOn() || !getBlacklist()) return;
-
-    const blackList = getBlacklist();
+async function blockedByRule(url) {
+    console.log(`[cb] url: ${url}`)
+    if (!(await get_is_on())) return;
+    let blackList = await get_blacklist();
     const hostname = extractHostname(url);
     for (let i = 0; i < blackList.length; i++) {
         const blockedSite = blackList[i];
         if (hostname.includes(blockedSite)) {
             console.log(`[cb] should block ${blockedSite} for rule ${hostname}`);
-            return false;
+            return blockedSite;
         }
     }
-    return true;
+    return null;
 }
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(async function(tabId, changeInfo, tab) {
     if (changeInfo["status"] == null) return;
-    if (checkUrl(tab.url)) {
-        return;
+    let rule = await blockedByRule(tab.url)
+    if (rule) {
+        block(tabId, rule)
     }
-    injectScript(tabId);
 });
-
-// chrome.webRequest.onBeforeSendHeaders.addListener(
-//     (msg) => {
-//         console.log("hello");
-//         // Guard clause if turned off or no blacklist
-//         if (!Utils.getIsOn() || !getBlacklist()) return;
-
-        
-//         // Check if hostname is whitelisted
-//         if (whitelisted(hostname)) {
-//             return;
-//         }
-
-//         // console.log(`Blocked request to ${hostname}`);
-
-//         
-//     },
-//     {
-//         urls: ["https://*/*"],
-//         types: ["main_frame"],
-//     },
-//     ["blocking"]
-// );

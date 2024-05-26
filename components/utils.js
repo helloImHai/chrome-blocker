@@ -1,44 +1,22 @@
-const BLACKLIST_KEY = "cblock-blacklisted-rewq";
-const IS_ON_KEY = "cblock-iso-rewq";
-
 const Utils = (function () {
-    function getBlacklist() {
-        let blackList = localStorage.getItem(BLACKLIST_KEY);
-
-        if (!blackList) {
-            return [];
-        }
-
-        if (!Array.isArray(JSON.parse(blackList))) {
-            setBlackList([]);
-            return [];
-        }
-
-        return JSON.parse(blackList);
+    async function get_is_on() {
+        console.log((await chrome.storage.sync.get("cb_is_on")).cb_is_on)
+        return (await chrome.storage.sync.get("cb_is_on")).cb_is_on;
     }
-
-    function setBlackList(blackList) {
-        localStorage.setItem(BLACKLIST_KEY, JSON.stringify(blackList));
+    async function set_is_on(isOn) {
+        return await chrome.storage.sync.set({"cb_is_on": isOn});
     }
-
-    function getIsOn() {
-        let isOn = localStorage.getItem(IS_ON_KEY);
-        console.log(`[chrome-blocker] isOn: ${isOn}`)
-        if (!isOn || !["true", "false"].includes(isOn)) {
-            setIsOn(true);
-            return true;
-        }
-        return isOn == "true";
+    async function get_blacklist() {
+        data = await chrome.storage.sync.get('cb_blacklist')
+        return data.cb_blacklist;
     }
-
-    function setIsOn(isOn) {
-        localStorage.setItem(IS_ON_KEY, JSON.stringify(isOn));
+    async function set_blacklist(blackList) {
+        return await chrome.storage.sync.set({"cb_blacklist": blackList});
     }
-
     return {
-        getBlacklist: getBlacklist,
-        setBlackList: setBlackList,
-        getIsOn: getIsOn,
-        setIsOn: setIsOn,
+        get_blacklist: get_blacklist,
+        set_blacklist: set_blacklist,
+        get_is_on: get_is_on,
+        set_is_on: set_is_on,
     };
 })();
