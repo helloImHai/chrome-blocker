@@ -23,6 +23,7 @@ const Utils = (function () {
 
     function getIsOn() {
         let isOn = localStorage.getItem(IS_ON_KEY);
+        console.log(`[chrome-blocker] isOn: ${isOn}`)
         if (!isOn || !["true", "false"].includes(isOn)) {
             setIsOn(true);
             return true;
@@ -31,8 +32,7 @@ const Utils = (function () {
     }
 
     function setIsOn(isOn) {
-        const bool = isOn ? "true" : "false";
-        localStorage.setItem(IS_ON_KEY, bool);
+        localStorage.setItem(IS_ON_KEY, JSON.stringify(isOn));
     }
 
     return {

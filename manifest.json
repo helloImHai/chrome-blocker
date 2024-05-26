@@ -1,16 +1,19 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Chrome Blocker",
     "description": "Blocks websites",
-    "version": "1.0.0",
-    "background": {
-        "scripts": ["./components/background.js"]
-    },
+    "version": "1.0.1",
     "icons": { "128": "icon128.png" },
-    "browser_action": {
+    "action": {
         "default_icon": "icon19.png",
         "default_popup": "popup.html"
     },
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js; object-src 'self'",
-    "permissions": ["webRequest", "webRequestBlocking", "https://*/*"]
+    "background": {
+        "service_worker": "./components/background.js"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self';"
+    },
+    "host_permissions": ["https://*/*"],
+    "permissions": ["tabs", "scripting", "storage"]
 }

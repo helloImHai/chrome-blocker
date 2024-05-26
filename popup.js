@@ -19,6 +19,7 @@ $(document).ready(function () {
      * Generates the list
      */
     const reloadPopup = () => {
+        console.log("[chrome-blocker] reloading popup")
         showContents(Utils.getIsOn());
         const blackList = Utils.getBlacklist().reverse();
 
