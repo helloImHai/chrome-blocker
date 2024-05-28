@@ -6,13 +6,6 @@ async function get_blacklist() {
     return (await chrome.storage.sync.get('cb_blacklist')).cb_blacklist;
 }
 
-const WHITELIST = [
-    "google",
-    "maxcdn.bootstrapcdn",
-    "cdn.jsdelivr.net",
-    "fonts.gstatic",
-];
-
 function extractHostname(url) {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get hostname
@@ -27,15 +20,6 @@ function extractHostname(url) {
     hostname = hostname.split("?")[0];
 
     return hostname;
-}
-
-function whitelisted(hostname) {
-    for (let i = 0; i < WHITELIST.length; i++) {
-        if (hostname.includes(WHITELIST[i])) {
-            return true;
-        }
-    }
-    return false;
 }
 
 function block(tabId, rule) {
@@ -55,17 +39,45 @@ async function blockedByRule(url) {
     for (let i = 0; i < blackList.length; i++) {
         const blockedSite = blackList[i];
         if (hostname.includes(blockedSite)) {
-            console.log(`[cb] should block ${blockedSite} for rule ${hostname}`);
+            console.log(`[cb] should block ${hostname} for rule ${blockedSite}`);
             return blockedSite;
         }
     }
     return null;
 }
 
-chrome.tabs.onUpdated.addListener(async function(tabId, changeInfo, tab) {
-    if (changeInfo["status"] == null) return;
+function set_icon(is_on) {
+    let iconPath = is_on ? "../icon128.png" : "../icon128_bw.png";
+    chrome.action.setIcon({ path: iconPath });
+}
+
+async function check_and_block(tabId, tab) {
     let rule = await blockedByRule(tab.url)
     if (rule) {
         block(tabId, rule)
     }
-});
+}
+
+async function check_block_current_tab() {
+    if (!await get_is_on()) return;
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        // since only one tab should be active and in the current window at once
+        // the return variable should only have one entry
+        var tab = tabs[0];
+        await check_and_block(tab.id, tab)
+    });
+}
+
+async function setup() {
+    set_icon(await get_is_on())
+
+    chrome.tabs.onUpdated.addListener(check_block_current_tab);
+    chrome.tabs.onActivated.addListener(check_block_current_tab);
+    chrome.storage.sync.onChanged.addListener(async function(changes) {
+        await check_block_current_tab()
+        if (!changes.cb_is_on) return;
+        set_icon(changes.cb_is_on.newValue)
+    });
+}
+
+setup();

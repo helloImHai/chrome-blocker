@@ -2,17 +2,17 @@
     "manifest_version": 3,
     "name": "Chrome Blocker",
     "description": "Blocks websites",
-    "version": "1.0.1",
-    "icons": { "128": "icon128.png" },
+    "version": "1.1.0",
+    "icons": { 
+        "19": "icon19.png",
+        "128": "icon128.png" 
+    },
     "action": {
-        "default_icon": "icon19.png",
+        "default_icon": "icon128.png",
         "default_popup": "popup.html"
     },
     "background": {
         "service_worker": "./components/background.js"
-    },
-    "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self';"
     },
     "host_permissions": ["https://*/*"],
     "permissions": ["tabs", "scripting", "storage"]
